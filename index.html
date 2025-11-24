@@ -9,30 +9,62 @@
 
 	<!-- Font Awesome links -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-		integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+		xintegrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="https://cdn.tailwindcss.com"></script>
 	<title>Mini-Application</title>
 
+	<style>
+		/* Loader animatsiyalari */
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin-reverse {
+			to {
+				transform: rotate(-360deg);
+			}
+		}
+
+		.animate-spin {
+			animation: spin 1.5s linear infinite;
+		}
+
+		.animate-spin-reverse {
+			animation: spin-reverse 1.2s linear infinite;
+		}
+
+		.animate-spin-slow {
+			animation: spin 3s linear infinite;
+		}
+	</style>
 </head>
 
 <body class="bg-[#09090b] text-white">
-	<!-- Loader -->
-	<div
-		class="relative inline-block w-12 h-12 rounded-full border-4 border-solid border-white border-r-transparent border-b-transparent animate-spin">
+
+	<!-- Loader - Sahifa yuklanguncha ishlaydi. Markazga joylashtirildi. -->
+	<div id="page-loader"
+		class="fixed inset-0 flex items-center justify-center bg-[#09090b] z-50 transition-opacity duration-300 opacity-100">
 		<div
-			class="absolute inset-0 m-auto w-10 h-10 rounded-full border-4 border-solid border-transparent border-b-orange-600 border-l-orange-600 animate-spin-reverse">
-		</div>
-		<div
-			class="absolute inset-0 m-auto w-8 h-8 rounded-full border-4 border-solid border-white border-r-transparent border-b-transparent animate-spin-slow">
+			class="relative inline-block w-12 h-12 rounded-full border-4 border-solid border-white border-r-transparent border-b-transparent animate-spin">
+			<div
+				class="absolute inset-0 m-auto w-10 h-10 rounded-full border-4 border-solid border-transparent border-b-orange-600 border-l-orange-600 animate-spin-reverse">
+			</div>
+			<div
+				class="absolute inset-0 m-auto w-8 h-8 rounded-full border-4 border-solid border-white border-r-transparent border-b-transparent animate-spin-slow">
+			</div>
 		</div>
 	</div>
+
 	<div class="min-h-screen flex">
 		<!-- Navigation Starts -->
 		<nav>
-			<section
-				class="fixed left-0 top-0 bg-[#18181b] h-screen bg-card/95 backdrop-blur-md  z-40 transition-transform duration-300 -translate-x-full md:translate-x-0 w-64 p-6">
+			<section id="sidebar"
+				class="fixed left-0 top-0 bg-[#18181b] h-screen bg-card/95 backdrop-blur-md  z-40 transition-transform duration-300 -translate-x-full md:translate-x-0 w-64 p-6 shadow-2xl md:shadow-none">
 
-				<button class="absolute top-4 right-4 text-white md:hidden">
+				<button id="close-menu-btn"
+					class="absolute top-4 right-4 text-white md:hidden p-2 rounded-full hover:bg-[#27272a] transition">
 					<i class="fa-solid fa-xmark text-2xl"></i>
 				</button>
 
@@ -43,88 +75,93 @@
 				</div>
 
 				<div class="space-y-2 text-[#fafafa]">
-					<a href="#calculator"> <button
+					<a href="#calculator" onclick="closeSidebar()"> <button
 							class="w-full cursor-pointer text-start h-11 px-4 py-2 rounded-md transition hover:text-[#6841a8] hover:bg-[#231d2e]"><i
-								class="fa-solid fa-calculator"></i> Kalkulyator</button></a>
-					<a href="#tasks">
+								class="fa-solid fa-calculator mr-3"></i> Kalkulyator</button></a>
+					<a href="#tasks" onclick="closeSidebar()">
 						<button
 							class="w-full cursor-pointer text-start h-11 px-4 py-2 rounded-md transition hover:bg-[#231d2e] hover:text-[#6841a8]"><i
-								class="fa-solid fa-list-check"></i> Vazifalar</button>
+								class="fa-solid fa-list-check mr-3"></i> Vazifalar</button>
 					</a>
-					<a href="#colors">
+					<a href="#colors" onclick="closeSidebar()">
 						<button
 							class="w-full cursor-pointer text-start h-11 px-4 py-2 rounded-md transition hover:text-[#6841a8] hover:bg-[#231d2e]"><i
-								class="fa-solid fa-stopwatch-20"></i> Ranglar</button>
+								class="fa-solid fa-palette mr-3"></i> Ranglar</button>
 					</a>
-					<a href="#timer">
+					<a href="#timer" onclick="closeSidebar()">
 						<button
 							class="w-full cursor-pointer text-start h-11 px-4 py-2 rounded-md transition hover:text-[#6841a8] hover:bg-[#231d2e]"><i
-								class="fa-solid fa-stopwatch-20"></i> Sekundomer</button>
+								class="fa-solid fa-stopwatch-20 mr-3"></i> Sekundomer</button>
 					</a>
-					<a href="#database">
+					<a href="#database" onclick="closeSidebar()">
 						<button
 							class="w-full cursor-pointer text-start h-11 px-4 py-2 rounded-md transition hover:text-[#6841a8] hover:bg-[#231d2e]"><i
-								class="fa-solid fa-database"></i> Ma'lumotlar</button>
+								class="fa-solid fa-database mr-3"></i> Ma'lumotlar</button>
 					</a>
 				</div>
 				<p class="text-xs text-[#a1a1aa] absolute bottom-4">React + TypeScript bilan yaratilgan</p>
 			</section>
 		</nav>
 		<!-- Navigation Ends -->
-		<main class="flex-1 overflow-y-auto md:ml-64">
 
-			<button class="fixed top-4 left-4 px-6 text-white text-2xl md:hidden z-30">
+		<main class="flex-1 overflow-y-auto md:ml-64 pt-4 md:pt-0">
+
+			<!-- Mobile Menu Opener Button -->
+			<button id="open-menu-btn"
+				class="fixed top-4 left-4 p-3 text-white text-xl md:hidden z-30 bg-[#18181b80] rounded-xl backdrop-blur-sm border border-[#3C83F6]/50">
 				<i class="fa-solid fa-bars"></i>
 			</button>
+
 			<!-- Calculator Starts -->
-			<section id="calculator" class="min-h-screen flex flex-col items-center py-20 px-4">
+			<section id="calculator" class="min-h-screen flex flex-col items-center py-20 px-4 pt-24 md:pt-20">
 				<div class="mt-10 md:mt-0">
 					<h2
-						class="text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-10">
+						class="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-10">
 						Kalkulyator</h2>
 					<div
-						class="bg-[#18181b80] rounded-lg border text-card-foreground w-md shadow-sm mx-auto p-6 border-[#8852e033]">
+						class="bg-[#18181b80] rounded-lg border text-card-foreground w-full max-w-sm sm:max-w-md shadow-2xl mx-auto p-6 border-[#8852e033]">
 						<div class="mb-6 p-2 rounded-lg text-right bg-[#27272a4d]">
 							<div class="text-sm text-muted-foreground mb-2 h-6"></div>
 							<div class="text-4xl font-bold break-all text-white">0</div>
 						</div>
 						<div class="grid grid-cols-4 gap-3 mb-4 text-white ">
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">7</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">7</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">8</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">8</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">9</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">9</button>
 							<button
-								class="bg-[#8852e0] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">÷</button>
+								class="bg-[#8852e0] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">÷</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">4</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">4</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">5</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">5</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">6</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">6</button>
 							<button
-								class="bg-[#8852e0] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">×</button>
+								class="bg-[#8852e0] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">×</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">1</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">1</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">2</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">2</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">3</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">3</button>
 							<button
-								class="bg-[#8852e0] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">-</button>
+								class="bg-[#8852e0] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">-</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">0</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">0</button>
 							<button
-								class="bg-[#3c83f6] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">.</button>
+								class="bg-[#3c83f6] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">.</button>
 							<button
-								class="bg-[#8852e0] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">=</button>
+								class="bg-[#8852e0] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">=</button>
 							<button
-								class="bg-[#8852e0] text-xl font-semibold px-4 py-2 rounded-md transition hover:opacity-80 cursor-pointer">+</button>
+								class="bg-[#8852e0] text-xl font-semibold px-4 py-3 rounded-xl transition hover:opacity-80 active:scale-95 cursor-pointer">+</button>
 						</div>
 						<button
-							class="bg-[#ef4444] text-white text-center px-4 py2 rounded-md w-full h-10 text-lg font-medium">Tozalash
-							(C)</button>
+							class="bg-[#ef4444] text-white text-center px-4 py-2 rounded-xl w-full h-10 text-lg font-medium hover:bg-[#dc2626] transition active:scale-95">Tozalash
+							(C)
+						</button>
 					</div>
 				</div>
 			</section>
@@ -139,89 +176,99 @@
 					</h2>
 
 					<div
-						class="rounded-lg shadow-2xl max-w-xl lg:max-w-2xl mx-auto px-4 py-4 md:px-5 md:py-6 border border-[#3C83F6] bg-[#18181b80] backdrop-blur-sm">
+						class="rounded-lg shadow-2xl w-full max-w-xl lg:max-w-2xl mx-auto px-4 py-4 md:px-6 md:py-8 border border-[#3C83F6]/50 bg-[#18181b80] backdrop-blur-sm">
 
 						<div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
 							<input
-								class="flex-grow w-full rounded-md border border-[#303036] px-4 py-3  text-base text-[#a1a1aa] bg-[#18181b] focus:outline-none focus:ring-2 focus:ring-[#3C83F6]"
+								class="flex-grow w-full rounded-md border border-[#303036] px-4 py-3  text-base text-[#a1a1aa] bg-[#18181b] focus:outline-none focus:ring-2 focus:ring-[#3C83F6]"
 								type="text" placeholder="Yangi vazifa kiriting..." id="tasks_input">
 
 							<button
-								class="w-full sm:w-auto px-6 py-3 text-white font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition duration-300 shadow-lg whitespace-nowrap"
+								class="w-full sm:w-auto px-6 py-3 text-white font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition duration-300 shadow-lg whitespace-nowrap active:scale-[0.98]"
 								id="tasks_btn">
 								Qo'shish
 							</button>
 						</div>
 						<div id="tasks_wrapper" class="space-y-2 ">
+							<!-- Vazifalar bu yerga qo'shiladi -->
 						</div>
 						<div class="mt-6 pt-6 border-t border-border text-center text-muted-foreground">
-							<p>
-								Jami: <span id="total-tasks">0</span> ta vazifa |
-								Bajarilgan: <span id="completed-tasks">0</span> ta
+							<p class="text-[#a1a1aa]">
+								Jami: <span id="total-tasks" class="font-bold text-white">0</span> ta vazifa |
+								Bajarilgan: <span id="completed-tasks" class="font-bold text-white">0</span> ta
 							</p>
 						</div>
 					</div>
 				</div>
 			</section>
 			<!-- Tasks Ends -->
+
 			<!-- Colors Starts -->
 			<section id="colors"
 				class="min-h-screen flex items-center justify-center py-10 px-4 md:py-20 md:px-6 bg-[#18181b]">
 				<div class="w-full max-w-6xl">
-					<h2 class="text-4xl md:text-5xl font-bold text-center mb-12 transition-colors duration-700" id="title-color">
+					<h2
+						class="text-4xl md:text-5xl font-bold text-center mb-12 transition-colors duration-700 bg-gradient-to-r from-pink-500 to-purple-600 text-transparent bg-clip-text"
+						id="title-color">
 						Ranglar
 						Almashtirgich</h2>
 					<div
-						class="rounded-lg shadow-2xl max-w-xl lg:max-w-2xl mx-auto px-20 py-10 md:px-5 md:py-6 border border-[#ff5291] bg-[#18181b80] backdrop-blur-sm">
-						<div class="text-center space-y-6 px-5">
-							<p class="text-[#a1a1aa] text-lg ">Tasodifiy ranglar generatori. Har safar bosganda yangi rang
+						class="rounded-xl shadow-2xl w-full max-w-xl lg:max-w-2xl mx-auto p-6 sm:p-10 md:p-12 border border-[#ff5291]/50 bg-[#18181b80] backdrop-blur-sm">
+						<div class="text-center space-y-6 px-0 sm:px-5">
+							<p class="text-[#a1a1aa] text-base sm:text-lg ">Tasodifiy ranglar generatori. Har safar bosganda yangi
+								rang
 								kombinatsiyasi yaratiladi!</p>
-							<button id="random_colors" class="px-5 py-3 text-xl w-full font-semibold rounded-lg shadow-md 
-               bg-gradient-to-r from-pink-500 to-purple-600 
-               hover:from-pink-600 hover:to-purple-700 
-               transition duration-300"><i class="fa-solid fa-shuffle"></i> Rangni O'zgartirish</button>
+							<button id="random_colors" class="px-5 py-3 text-lg sm:text-xl w-full font-semibold rounded-xl shadow-lg 
+                                bg-gradient-to-r from-pink-500 to-purple-600 
+                                hover:from-pink-600 hover:to-purple-700 
+                                transition duration-300 active:scale-[0.98]"><i class="fa-solid fa-shuffle mr-2"></i>
+								Rangni O'zgartirish</button>
 							<div class="space-y-4 pt-5">
 								<button id="first-btn"
-									class="border border-[#ffffff1a] rounded-lg p-6 w-full cursor-pointer transition hover:scale-105">
-									<p class="text-sm">Fon rangi (bosib nusxalang)</p>
-									<p class="text-2xl font-bold">hsl(240 6% 10%)</p>
+									class="border border-[#ffffff1a] rounded-xl p-6 w-full cursor-pointer transition hover:scale-[1.01] bg-[#09090b]">
+									<p class="text-sm text-[#a1a1aa]">Fon rangi (bosib nusxalang)</p>
+									<p class="text-xl sm:text-2xl font-bold">hsl(240 6% 10%)</p>
 								</button>
 								<button id="second-btn"
-									class="rounded-lg bg-white p-6 w-full cursor-pointer transition hover:scale-105">
+									class="rounded-xl bg-white p-6 w-full cursor-pointer transition hover:scale-[1.01]">
 									<p class="text-sm text-[#09090b] ">Matn rangi (bosib nusxalang)</p>
-									<p class="text-2xl font-bold text-[#09090b]">#ffffff</p>
+									<p class="text-xl sm:text-2xl font-bold text-[#09090b]">#ffffff</p>
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</section>
-			<!-- Color Starts -->
+			<!-- Color Ends -->
+
 			<!-- Timer Starts -->
 			<section id="timer"
-				class=" min-h-screen flex items-center justify-center py-10 px-4 md:py-20 md:px-6 bg-[#0f0f11]">
+				class="min-h-screen flex items-center justify-center py-10 px-4 md:py-20 md:px-6 bg-[#0f0f11]">
 				<div>
 					<h2
-						class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-6 md:mb-10">
+						class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-6 md:mb-10">
 						Sekundomer</h2>
-					<div class="rounded-lg shadow-sm max-w-lg mx-auto p-8 border border-[#1d1d21] bg-[#131317]">
+					<div class="rounded-xl shadow-2xl w-full max-w-lg mx-auto p-8 border border-[#1d1d21] bg-[#131317]">
 						<div class="text-center space-y-8">
 
 							<div class="p-8 bg-muted/30 rounded-2xl bg-[#19191d] ">
-								<div class="text-7xl flex md:text-8xl font-mono font-bold text-[#7d59e3]">
-									<span id="minutes">00</span> : <span id="seconds">00</span> . <span id="milliseconds"
-										class="text-6xl mt-7">00</span>
+								<div class="text-6xl flex md:text-8xl font-mono font-bold text-[#7d59e3] justify-center items-baseline">
+									<span id="minutes">00</span>
+									<span class="mx-1">:</span>
+									<span id="seconds">00</span>
+									<span class="mx-1 text-5xl md:text-6xl text-[#5a429b]">.</span>
+									<span id="milliseconds" class="text-5xl md:text-6xl text-[#5a429b]">00</span>
 								</div>
 							</div>
 
-							<div class="flex items-center justify-center gap-2">
+							<div class="flex items-center justify-center gap-4">
 								<button id="boshlash-tugmasi"
-									class="inline-flex items-center justify-center gap-2 rounded-md px-8 h-16 w-32 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-500 text-white">
+									class="inline-flex items-center justify-center gap-2 rounded-xl px-4 sm:px-8 h-14 sm:h-16 flex-1 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow-md hover:shadow-lg transition active:scale-95">
 									<i class="fa-solid fa-play"></i> Boshlash
 								</button>
 
 								<button id="reset"
-									class="inline-flex items-center justify-center gap-2 rounded-md px-2 h-16 w-auto text-lg font-semibold bg-black border border-[#1d1d21] text-white">
+									class="inline-flex items-center justify-center gap-2 rounded-xl px-4 h-14 sm:h-16 text-lg font-semibold bg-black border border-[#1d1d21] text-white shadow-md hover:bg-[#1f1f22] transition active:scale-95">
 									<i class="fa-solid fa-rotate-left"></i> Qayta Boshlash
 								</button>
 							</div>
@@ -232,25 +279,29 @@
 				</div>
 			</section>
 			<!-- Timer Ends -->
+
 			<!-- Database Starts -->
 			<section id="database" class="min-h-screen flex items-center justify-center py-20 px-4 bg-[#0f0f11]">
 				<div class="w-full max-w-6xl">
 					<h2
-						class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-6 md:mb-10">
+						class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text text-center mb-6 md:mb-10">
 						Ma'lumotlar Ko'rsatkichi</h2>
 					<div class="mb-8 text-center">
 						<button
-							class="inline-flex items-center justify-center gap-2 text-sm font-medium rounded-md  h-14 px-8 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"><i
+							class="inline-flex items-center justify-center gap-2 text-base font-medium rounded-xl  h-14 px-8 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 shadow-md hover:shadow-lg transition active:scale-[0.98]"><i
 								class="fa-solid fa-rotate"></i> Ma'lumotlarni Yangilash</button>
 					</div>
-					<div id="database-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+					<!-- Ma'lumot kartalari responsiv gridda -->
+					<div id="database-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+					</div>
 				</div>
-	</div>
-	</section>
-	<!-- Database Ends -->
-	</main>
+			</section>
+			<!-- Database Ends -->
+		</main>
 	</div>
 	<script src="js/script.js"></script>
+
+
 </body>
 
 </html>

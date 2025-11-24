@@ -1,4 +1,38 @@
 window.addEventListener('DOMContentLoaded', () => {
+	// Loader
+	const loader = document.getElementById('page-loader')
+	const sidebar = document.getElementById('sidebar')
+	const openBtn = document.getElementById('open-menu-btn')
+	const closeBtn = document.getElementById('close-menu-btn')
+
+	if (loader) {
+		setTimeout(() => {
+			loader.style.opacity = '0'
+			setTimeout(() => {
+				loader.style.display = 'none'
+			}, 300)
+		}, 2000)
+	}
+
+	if (openBtn && sidebar) {
+		openBtn.addEventListener('click', () => {
+			sidebar.classList.remove('-translate-x-full')
+			document.body.style.overflow = 'hidden'
+		})
+	}
+
+	if (closeBtn && sidebar) {
+		closeBtn.addEventListener('click', () => {
+			closeSidebar()
+		})
+	}
+
+	window.closeSidebar = () => {
+		if (sidebar) {
+			sidebar.classList.add('-translate-x-full')
+			document.body.style.overflow = ''
+		}
+	}
 	// Tasks
 	const input = document.querySelector('#tasks_input'),
 		btn = document.querySelector('#tasks_btn'),
@@ -212,87 +246,22 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
-	const dataCards = [
-		{
-			title: 'Ervin Xouell',
-			subTitle: 'Deckow-Crist',
-			email: 'Shanna@melissa.tv',
-			number: '010-692-6593 x09125',
-			link: 'anastasia.net',
-		},
-		{
-			title: 'Leanne Graham',
-			subTitle: 'Romaguera-Crona',
-			email: 'Sincere@april.biz',
-			number: '1-770-736-8031 x56442',
-			link: 'hildegard.org',
-		},
-		{
-			title: 'Clementina DuBuque',
-			subTitle: 'Hoeger LLC',
-			email: 'Rey.Padberg@karina.biz',
-			number: '1-463-123-4447',
-			link: 'ramiro.info',
-		},
-		{
-			title: 'Clementine Bauch',
-			subTitle: 'Romaguera-Jacobson',
-			email: 'Nathan@yesenia.net',
-			number: '1-463-123-4447',
-			link: 'ramiro.info',
-		},
-		{
-			title: 'Patricia Lebsack',
-			subTitle: 'Robel-Corkery',
-			email: 'Julianne.OConner@kory.org',
-			number: '493-170-9623 x156',
-			link: 'kale.biz',
-		},
-		{
-			title: 'Chelsey Dietrich',
-			subTitle: 'Keebler LLC',
-			email: 'Lucio_Hettinger@annie.ca',
-			number: '(254)954-1289',
-			link: 'demarco.info',
-		},
-		{
-			title: 'Mrs. Dennis Schulist',
-			subTitle: 'Considine-Lockman',
-			email: 'Karley_Dach@jasper.info',
-			number: '1-477-935-8478 x6430',
-			link: 'ola.org',
-		},
-		{
-			title: 'Kurtis Weissnat',
-			subTitle: 'Johns Group',
-			email: 'Telly.Hoeger@billy.biz',
-			number: '210.067.6132',
-			link: 'elvis.io',
-		},
-		{
-			title: 'Nicholas Runolfsdottir ',
-			subTitle: 'Abernathy Group',
-			email: 'Sherwood@rosamond.me',
-			number: '586.493.6943 x140',
-			link: 'jacynthe.com',
-		},
-		{
-			title: 'Glenna Reichert',
-			subTitle: 'Yost and Sons',
-			email: 'Chaim_McDermott@dana.io',
-			number: '(775)976-6794 x41206',
-			link: 'conrad.com',
-		},
-	]
-
-	dataCards.forEach(dataCard => {
-		new Database(
-			dataCard.title,
-			dataCard.subTitle,
-			dataCard.email,
-			dataCard.number,
-			dataCard.link,
-			'#database-cards'
-		).render()
+	fetch('http://localhost:3000/Database', {
+		method: 'GET',
+		header: { 'Content-Type': 'application/json' },
 	})
+		.then(response => response.json())
+		.then(data => {
+			data.forEach(dataCard => {
+				const { title, subTitle, email, number, link } = dataCard
+				new Database(
+					title,
+					subTitle,
+					email,
+					number,
+					link,
+					'#database-cards'
+				).render()
+			})
+		})
 })
